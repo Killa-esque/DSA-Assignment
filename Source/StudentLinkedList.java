@@ -23,11 +23,10 @@ public class StudentLinkedList {
         }
         Node newNode = new Node(sv,runNode.getNext());
         runNode.setNext(newNode);
-        System.out.println("Add last successfully");
     }
 
-    private boolean constain(Student sv) throws NoSuchElementException{
-        if (isEmpty()) throw new NoSuchElementException("Empty linked list");
+    private boolean constain(Student sv){
+        if (isEmpty()) return false;
         Node runNode = head;
         while (runNode.getNext() != null){
             if (runNode.getData().getId() == sv.getId()){
@@ -38,8 +37,8 @@ public class StudentLinkedList {
         return false;
     }
 
-    private boolean constain(int id) throws NoSuchElementException{
-        if (isEmpty()) throw new NoSuchElementException("Empty linked list");
+    private boolean constain(int id){
+        if (isEmpty()) return false;
         Node runNode = head;
         while (runNode != null){
             if (runNode.getData().getId() == id){
@@ -50,8 +49,8 @@ public class StudentLinkedList {
         return false;
     }
 
-    private void removeFirst()throws RuntimeException{
-        if(isEmpty()) throw new RuntimeException("Empty Linked List");
+    private void removeFirst()throws NoSuchElementException{
+        if(isEmpty()) throw new NoSuchElementException();
         else{
             head = head.getNext();
         }
@@ -88,8 +87,7 @@ public class StudentLinkedList {
     }
 
     // Requirement 2
-    public boolean deleteStudent(int id) {
-        // code here
+    public boolean deleteStudent(int id) throws NoSuchElementException {
         if (isEmpty()) throw new NoSuchElementException();
         else if (!constain(id)){
             return false;
@@ -114,8 +112,7 @@ public class StudentLinkedList {
 
     // Requirement 3
     public boolean modifyName(int id, String name) {
-        if (isEmpty()) throw new NoSuchElementException();
-        else if (!constain(id)){return false;}
+        if (!constain(id)){return false;}
         else {
             Node current = head;
             while (current != null){
@@ -130,11 +127,10 @@ public class StudentLinkedList {
     }
 
     // Requirement 4
-    public Student getHighestScore() throws NoSuchElementException {
-        if(isEmpty()) throw new NoSuchElementException();
+    public Student getHighestScore() {
         Node currentNode = head;
         double max = head.getData().getGpa();
-        Student studentReturn = null;
+        Student studentReturn = head.getData();
         while (currentNode.getNext() != null){
             if (currentNode.getData().getGpa() > max){
                 max = currentNode.getData().getGpa();
@@ -147,7 +143,6 @@ public class StudentLinkedList {
 
     // Requirement 5
     public StudentLinkedList getGraduateStudents(int year)  {
-        // code here
         StudentLinkedList newList = new StudentLinkedList();
         Node currentNode = head;
         while (currentNode != null){
@@ -156,14 +151,11 @@ public class StudentLinkedList {
             }
             currentNode = currentNode.getNext();
         }
-        if (newList.isEmpty()) return null;
         return newList;
     }
 
     // Requirement 6
     public StudentLinkedList findByName(String str) {
-        // code here
-        if (isEmpty()) return null;
         StudentLinkedList newList = new StudentLinkedList();
         Node currentNode = head;
         while (currentNode != null){
@@ -172,7 +164,6 @@ public class StudentLinkedList {
             }
             currentNode = currentNode.getNext();
         }
-        if (newList.isEmpty()) return null;
         return newList;
     }
 

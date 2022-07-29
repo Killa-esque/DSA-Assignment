@@ -1,0 +1,7 @@
+SinhVien [id=51403039, name=Nguyen Van A, enrollmentYear=2014, gpa=9.0]
+SinhVien [id=51403040, name=Nguyen Van B, enrollmentYear=2014, gpa=8.0]
+SinhVien [id=51403041, name=Nguyen Van C, enrollmentYear=2014, gpa=7.0]
+SinhVien [id=51403042, name=Nguyen Van D, enrollmentYear=2014, gpa=6.0]
+SinhVien [id=51403043, name=Nguyen Van E, enrollmentYear=2014, gpa=5.0]
+SinhVien [id=51403044, name=Nguyen Van F, enrollmentYear=2014, gpa=4.0]
+SinhVien [id=51403045, name=Nguyen Van G, enrollmentYear=2014, gpa=3.0]

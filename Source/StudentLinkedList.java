@@ -15,6 +15,17 @@ public class StudentLinkedList {
         head = new Node(sv,head);
     }
 
+    public void addLast(Student sv) throws NoSuchElementException {
+        if(isEmpty()) {addFirst(sv);}
+        Node runNode = head;
+        while (runNode.getNext() != null){
+            runNode = runNode.getNext();
+        }
+        Node newNode = new Node(sv,runNode.getNext());
+        runNode.setNext(newNode);
+        System.out.println("Add last successfully");
+    }
+
     private boolean constain(Student sv) throws NoSuchElementException{
         if (isEmpty()) throw new NoSuchElementException("Empty linked list");
         Node runNode = head;
@@ -39,18 +50,6 @@ public class StudentLinkedList {
         return false;
     }
 
-    private boolean constain(String name) throws NoSuchElementException{
-        if (isEmpty()) throw new NoSuchElementException("Empty linked list");
-        Node runNode = head;
-        while (runNode != null){
-            if (runNode.getData().getName() == name){
-                return true;
-            }
-            runNode = runNode.getNext();
-        }
-        return false;
-    }
-
     private void removeFirst()throws RuntimeException{
         if(isEmpty()) throw new RuntimeException("Empty Linked List");
         else{
@@ -58,34 +57,18 @@ public class StudentLinkedList {
         }
     }
 
-    private Node getLast (){
-        if (isEmpty()) return null;
-        Node runNode = head;
-        while (runNode.getNext() != null){
-            runNode = runNode.getNext();
-        }
-        return runNode;
+    private void storeAction(Node node, String action){
+        actions.push(new Pair(node, action));
     }
 
-    private void removeLast() throws NoSuchElementException{
-        if (isEmpty()) throw new NoSuchElementException();
-        Node currentNode = head;
-        Node preNode = null;
-        if (currentNode.getNext() == null){
-            removeFirst();
-        }
-        while (currentNode.getNext() != null){
-            preNode = currentNode;
-            currentNode = currentNode.getNext();
-        }
-        preNode.setNext(currentNode.getNext());
-    }
 
 
     // Requirement 1
     public boolean addStudent(Student sv) {
         if (isEmpty() || head.getData().getId() > sv.getId()){
             addFirst(sv);
+            storeAction(head, "add");
+
             return true;
         }
         else if (head.getData().getId() == sv.getId()){
@@ -99,6 +82,7 @@ public class StudentLinkedList {
             }
             Node newNode = new Node(sv,current.getNext());
             current.setNext(newNode);
+            storeAction(newNode, "add");
         }
         return true;
     }
@@ -108,42 +92,34 @@ public class StudentLinkedList {
         // code here
         if (isEmpty()) throw new NoSuchElementException();
         else if (!constain(id)){
-            System.out.println("1. Student not found");
             return false;
         }
         else if (head.getData().getId() == id){
-            System.out.println("2. Head deleted");
             removeFirst();
-            return true;
-        }
-        else if (getLast().getData().getId() == id){
-            System.out.println("3. Tail deleted");
-            removeLast();
+            storeAction(head, "remove");
             return true;
         }
         else {
-            System.out.println("4. Student deleted");
             Node current = head;
-            Node preNode = null;
+            Node pre = null;
             while (current.getNext() != null && current.getData().getId() != id){
-                preNode = current;
+                pre = current;
                 current = current.getNext();
             }
-            preNode.setNext(current.getNext());
+            pre.setNext(current.getNext());
+            storeAction(current, "remove");
             return true;
         }
     }
 
     // Requirement 3
     public boolean modifyName(int id, String name) {
-        // code here
         if (isEmpty()) throw new NoSuchElementException();
         else if (!constain(id)){return false;}
         else {
             Node current = head;
             while (current != null){
                 if (current.getData().getId() == id){
-                    System.out.println(current.getData().getId());
                     current.getData().setName(name);
                     return true;
                 }
@@ -180,6 +156,7 @@ public class StudentLinkedList {
             }
             currentNode = currentNode.getNext();
         }
+        if (newList.isEmpty()) return null;
         return newList;
     }
 
@@ -195,17 +172,34 @@ public class StudentLinkedList {
             }
             currentNode = currentNode.getNext();
         }
+        if (newList.isEmpty()) return null;
         return newList;
     }
 
     // Requirement 7
     public boolean undo() {
-        // code here
-        return true;
+        if (actions.isEmpty()){
+            return false;
+        }
+        else {
+            Pair pair = actions.pop();
+            Pair tmp;
+            switch (pair.getAction()){
+                case "add":
+                    deleteStudent(pair.getNode().getData().getId());
+                    tmp = actions.pop();
+                    return true;
+                case "remove":
+                    addStudent(pair.getNode().getData());
+                    tmp = actions.pop();
+                    return true;
+                default:
+                    return false;
+            }
+        }
     }
 
     // Student don't modify the methods below
-
     public String toString() {
         String result = "";
         if (head == null) {
